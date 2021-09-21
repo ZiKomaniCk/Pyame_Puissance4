@@ -23,6 +23,19 @@ class Ball:
     def move(self):
         self.posX = self.posX + self.dx
         self.posY = self.posY + self.dy
+    
+    def paddle_collision(self):
+        self.dx = -self.dx
+
+    def wall_collision(self):
+        self.dy = -self.dy
+
+    def restart_pos(self):
+        self.posX = WIDTH//2
+        self.posY = HEIGHT
+        self.dx = 0
+        self.dy = 0
+        self.show()
 
 class Paddle:
     ###Initialisation du Paddle
@@ -47,8 +60,51 @@ class Paddle:
         elif self.state == 'down':
             self.posY += 1
 
+    #empecher les barres de sortir de l'écran
     def bloq(self):
+        if self.posY <= 0:
+            self.posY =0
+        
+        if self.posY + self.height >= HEIGHT:
+            self.posY = HEIGHT - self.height
+
+class CollisionManag:
+
+    #calcul de colision entre la balle et le paddle gauche
+    def between_ball_and_paddleL(self, ball, paddleL):
+        if ball.posY + ball.radius > paddleL.posY and ball.posY - ball.radius < paddleL.posY + paddleL.height:
+            if ball.posX - ball.radius <= paddleL.posX + paddleL.width:
+                return True
+        
+        return False        
+    
+    #calcul de colision entre la balle et le paddle droit
+    def between_ball_and_paddleR(self, ball, paddleR):
+        if ball.posY + ball.radius > paddleR.posY and ball.posY - ball.radius < paddleR.posY + paddleR.height:
+            if ball.posX - ball.radius >= paddleR.posX:
+               return True
+
+        return False
+
+    def between_ball_and_walls(self, ball):
+        
+        #top
+        if ball.posY - ball.radius <= 0:
+            return True
+        
+        #bot
+        if ball.posY - ball.radius >= HEIGHT:
+            return True
+        
+        return False
+        
          
+    #Check balle pos pour score
+    def check_goal_player1(self, ball):
+        return ball.posX - ball.radius >= WIDTH
+
+    def check_goal_player2(self, ball):
+        return ball.posX + ball.radius <= 0
 
 ### Score
 class Score: 
@@ -63,6 +119,12 @@ class Score:
         
     def show(self):
         self.screen.blit(self.label, (self.posX - self.label.get_rect().width // 2, self.posY))
+    
+    ### fonction pour ajout des points
+    def increase(self):
+        points = int(self.points) + 1
+        self.points = str(points)
+        self.label = self.font.render(self.points,0 , WHITE)
 
 pygame.init()
 
@@ -87,6 +149,7 @@ paint_back()
 ball = Ball( screen, WHITE, WIDTH//2, HEIGHT//2, 12 )
 paddleL = Paddle( screen, WHITE, 15, HEIGHT//2 - 60, 20, 120 )
 paddleR = Paddle( screen, WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
+collision = CollisionManag()
 
 score1 = Score(screen,'0' , WIDTH//4,15)
 score2 = Score(screen, '0', WIDTH - WIDTH//4,15)
@@ -132,11 +195,23 @@ while True:
 
         #paddle gauche
         paddleL.move()
+        paddleL.bloq()
         paddleL.show()
 
         #paddle droit
         paddleR.move()
+        paddleR.bloq()
         paddleR.show()
+
+        #verif collision
+        if collision.between_ball_and_paddleL(ball, paddleL):
+            ball.paddle_collision()
+        
+        if collision.between_ball_and_paddleR(ball, paddleR):
+            ball.paddle_collision()
+
+        if collision.between_ball_and_walls(ball):
+            ball.wall_collision()
 
     #score
     score1.show()
