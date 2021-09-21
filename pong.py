@@ -213,6 +213,15 @@ while True:
         if collision.between_ball_and_walls(ball):
             ball.wall_collision()
 
+        ### Ajout des points avec check collision
+        if collision.check_goal_player1(ball):
+            score1.increase()
+            ball.restart_pos()
+
+        if collision.check_goal_player1(ball):
+            score2.increase()
+            ball.restart_pos()
+
     #score
     score1.show()
     score2.show()
