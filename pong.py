@@ -33,12 +33,22 @@ class Paddle:
         self.posY = posY
         self.width = width
         self.height = height
+        self.state = 'stopped'
         self.show()
 
     def show(self):
         pygame.draw.rect( self.screen, self.color, (self.posX, self.posY, self.width, self.height) )
 
-pygame.init()
+    # mouvement des paddles
+    def move(self):
+        if self.state == 'up':
+            self.posY -= 1
+        
+        elif self.state == 'down':
+            self.posY += 1
+
+    def bloq(self):
+         
 
 ### Score
 class Score: 
@@ -54,6 +64,7 @@ class Score:
     def show(self):
         self.screen.blit(self.label, (self.posX - self.label.get_rect().width // 2, self.posY))
 
+pygame.init()
 
 ### TAILLE ECRAN
 WIDTH = 900
@@ -93,24 +104,42 @@ while True:
             if event.key == pygame.K_p:
                 ball.start()
                 playing = True
+            
+            if event.key == pygame.K_z:
+                paddleL.state = 'up'
+            
+            if event.key == pygame.K_s:
+                paddleL.state = 'down'
+            
+            if event.key == pygame.K_UP:
+                paddleR.state = 'up'
+
+            if event.key == pygame.K_DOWN:
+                paddleR.state = 'down'
+        
+        if event.type == pygame.KEYUP:
+            paddleR.state = 'stopped'
+            paddleL.state = 'stopped'
 
     
     
     if playing:
         paint_back()
         
-        #mouvement de la balle
+        #mouvement de la balle + affichage
         ball.move()
         ball.show()
 
         #paddle gauche
+        paddleL.move()
         paddleL.show()
 
         #paddle droit
+        paddleR.move()
         paddleR.show()
 
-        score1.show()
-
-        score2.show()
+    #score
+    score1.show()
+    score2.show()
 
     pygame.display.update()
