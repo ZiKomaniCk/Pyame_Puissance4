@@ -2,7 +2,7 @@ import pygame, sys
 
 #Classes#
 class Ball:
-    #initialisation des paramètres de la balle
+    ###Initialisation des paramètres de la balle
     def __init__(self, screen,  color, posX, posY, radius):
         self.screen = screen
         self.color = color
@@ -14,10 +14,22 @@ class Ball:
     def show(self):
         pygame.draw.circle( self.screen, self.color, (self.posX, self.posY), self.radius )
 
-#class Paddle:
-    #def __init__
+class Paddle:
+    ###Initialisation du Paddle
+    def __init__(self, screen, color, posX, posY, width, height):
+        self.screen = screen
+        self.color = color
+        self.posX = posX
+        self.posY = posY
+        self.width = width
+        self.height = height
+        self.show()
+
+    def show(self):
+        pygame.draw.rect( self.screen, self.color, (self.posX, self.posY, self.width, self.height) )
 
 pygame.init()
+
 ### TAILLE ECRAN
 WIDTH = 900
 HEIGHT = 500
@@ -37,8 +49,9 @@ paint_back()
 
 #Objets#
 ball = Ball( screen, WHITE, WIDTH//2, HEIGHT//2, 12 )
+paddleL = Paddle( screen, WHITE, 15, HEIGHT//2 - 60, 20, 120 )
 
-### Boucle
+### Boucle main
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
