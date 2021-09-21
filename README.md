@@ -1,4 +1,4 @@
-# Pyame_Puissance4
+# Python_Pong
 Projet de fin de cours python
 
 Projet developpé avec pygame
