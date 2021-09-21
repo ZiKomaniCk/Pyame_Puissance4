@@ -50,6 +50,7 @@ paint_back()
 #Objets#
 ball = Ball( screen, WHITE, WIDTH//2, HEIGHT//2, 12 )
 paddleL = Paddle( screen, WHITE, 15, HEIGHT//2 - 60, 20, 120 )
+paddleR = Paddle( screen, WHITE, -15, HEIGHT//2 - 60, 20, 120 )
 
 ### Boucle main
 while True:
