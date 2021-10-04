@@ -32,7 +32,7 @@ class Ball:
 
     def restart_pos(self):
         self.posX = WIDTH//2
-        self.posY = HEIGHT
+        self.posY = HEIGHT//2
         self.dx = 0
         self.dy = 0
         self.show()
@@ -63,7 +63,7 @@ class Paddle:
     #empecher les barres de sortir de l'écran
     def bloq(self):
         if self.posY <= 0:
-            self.posY =0
+            self.posY = 0
         
         if self.posY + self.height >= HEIGHT:
             self.posY = HEIGHT - self.height
@@ -146,9 +146,9 @@ def paint_back():
 paint_back()
 
 #Objets#
-ball = Ball( screen, WHITE, WIDTH//2, HEIGHT//2, 12 )
 paddleL = Paddle( screen, WHITE, 15, HEIGHT//2 - 60, 20, 120 )
 paddleR = Paddle( screen, WHITE, WIDTH - 20 - 15, HEIGHT//2 - 60, 20, 120 )
+ball = Ball( screen, WHITE, WIDTH//2, HEIGHT//2, 12 )
 collision = CollisionManag()
 
 score1 = Score(screen,'0' , WIDTH//4,15)
